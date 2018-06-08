@@ -16,13 +16,16 @@ program test
     character(len=:), allocatable :: string
     integer, dimension(:,:), allocatable :: intarray
     integer :: i,j, fileunit
+    integer, dimension(:), allocatable :: a, b
     real(kind=dp), dimension(:), allocatable :: bin_mids, n
 
     write(*,*) testfunc(3,[4,5,6])
     write(*,*) testfunc([1,2,3],4)
     write(*,*) testfunc([1,2,3],[4,5,6])
 
-    ! do i = -5, 5
-    !     write(*,*), i, mod(i,4)
-    ! end do
+    a = [1,2,3,4,5]
+    b = [6,7,8,9,10]
+
+    write(*,fmt="(i0,x,i0,*(/,i0,x,i0))") a, b
+
 end program test

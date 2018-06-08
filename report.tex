@@ -159,7 +159,7 @@
 All files for this project are available at \url{https://github.com/anjohan/fys4460-4}.
 \begin{tikzpicture} \draw (0,0) -- (5,0); \end{tikzpicture}
 
-In this project i study the motion of a random walker who is only allowed to move on the percolating cluster. The holes in the percolating cluster mean that the walker will be slowed down relative to a walker moving freely, resulting in anomalous diffusion. A free random walker behaves according to normal diffusion, i.e.
+In this project I study the motion of a random walker who is only allowed to move on the percolating cluster. The holes in the percolating cluster mean that the walker will be slowed down relative to a walker moving freely, resulting in anomalous diffusion. A free random walker behaves according to normal diffusion, i.e.
 \[
     \ev{r^2} \propto Dt,
 \]
@@ -167,7 +167,7 @@ where \(D\) is the diffusion constant. A random walker on the percolating cluste
 \[
     \ev{r^2} \propto t^{2k'},
 \]
-where \(k'\) is expected to be smaller than \(1/2\). This should, however, only hold for motion on small scale, i.e.\ when the collision with obstacles make up a considerable part of the motion. When the walker has moved over distances much greater than the typical size of the obstacles \(\xi\), the diffusion medium looks homogeneous to the walker. Consequently, the motion should become similar to that of an ordinary random walker when \(\ev{r^2}\gg \xi^2\), i.e.
+where \(k'\) is expected to be smaller than \(1/2\). This should, however, only hold for motion on small scale, i.e.\ when the collisions with obstacles make up a considerable part of the motion. When the walker has moved over distances much greater than the typical size of the obstacles \(\xi\), the diffusion medium looks homogeneous to the walker. Consequently, the motion should become similar to that of an ordinary random walker when \(\ev{r^2}\gg \xi^2\), i.e.
 \[
     \ev{r^2} \propto Dt.
 \]
@@ -182,6 +182,20 @@ This can be summarised in an ordinary scaling ansatz,
 \[
     \ev{r^2} \propto t^{2k'} f\qty(\qty(p-p_c)t^x).
 \]
+By comparison with the expected behaviour, \(f(u)\) must be approximately constant for \(u\ll 1\), while \(f(u)=u^\mu\) for \(u\gg1\). The latter requirement gives
+\[
+    t^{2k'+ x\mu} = t \implies 2k' + x + \mu = 1.
+\]
+From these considerations, the following procedure can be used to calculate exponents and other interesting quantities.
+\begin{itemize}
+    \item Find \(\ev{r^2}\) for \(p=p_c\). Now \(\xi\to\infty\), so \(\ev{r^2}\propto t^{2k'}\). A double logarithmic plot of \(\ev{r^2(p_c)}\) vs.\ \(t\) will give \(2k'\) as the slope.
+    \item Find \(\ev{r^2}\) for several values of \(p>p_c\). Departure from the simulation with \(p=p_c\) marks the crossover between the two behaviours of \(\ev{r^2}\). The time coordinate for this crossover is called \(t_0\), while \(\xi^2\) is the corresponding mean squared displacement, giving \(\xi\).
+    \item There are now two main methods to determine \(\mu\) or \(x\):
+    \begin{itemize}
+        \item The slope of \(\ev{r^2}\propto D(p)t \propto \qty(p-p_c)^\mu t\) after the crossover time gives the diffusion coefficient for different values of \(p\). This can be plotted logarithmically as a function of \(p-p_c\), giving \(\mu\) as the slope.
+        \item The scaling ansatz gives \(t^{-2k'}\ev{r^2}=f\qty(\qty(p-p_c)t^x)\), showing that all the graphs of \(t^{-2k'}\ev{r^2}\) for different values of \(p\) should overlap when \(\qty(p-p_c)t^x\) is used as the \(x\)-axis. Finding \(x\) can therefore be done by trying multiple values and finding the one which minimises the deviation from overlap.
+    \end{itemize}
+\end{itemize}
 
 
 

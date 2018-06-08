@@ -18,13 +18,13 @@ set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${generalflags}")
 set(CMAKE_Fortran_FLAGS_RELEASE "${CMAKE_Fortran_FLAGS} ${CMAKE_Fortran_FLAGS_RELEASE} ${speedflags}")
 set(CMAKE_Fortran_FLAGS_DEBUG "${CMAKE_Fortran_FLAGS} ${CMAKE_Fortran_FLAGS_DEBUG} ${debugflags}")
 
-set(mylibraries utilities percolation lapack hk)
+set(mylibraries utilities percolation lapack hk randomwalk)
 
 function(addexewithlibs name)
     add_executable(${name} ${CMAKE_SOURCE_DIR}/src/${name}.f90)
     target_link_libraries(${name} ${mylibraries})
 endfunction()
 
-foreach(exe verification stuff)
+foreach(exe k verification stuff)
     addexewithlibs(${exe})
 endforeach()
