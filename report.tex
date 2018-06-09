@@ -44,7 +44,7 @@
 \usepgfplotslibrary{external}
 \tikzset{external/system call={lualatex \tikzexternalcheckshellescape -halt-on-error -interaction=batchmode -jobname "\image" "\texsource"}}
 \tikzexternalize[prefix=tmp/, mode=list and make]
-\pgfplotsset{cycle list/Dark2}
+\pgfplotsset{cycle list/Paired}
 \pgfplotsset{compat=1.8}
 \renewcommand{\CancelColor}{\color{red}}
 \let\oldexp=\exp
@@ -197,7 +197,40 @@ From these considerations, the following procedure can be used to calculate expo
     \end{itemize}
 \end{itemize}
 
-
+\subsection{Diffusion at \(p=p_c\)}
+When \(p=p_c\), the mean squared displacement behaves according to
+\[
+    \ev{r^2}\propto t^{2k'}.
+\]
+\openin\infile=tmp/k.dat
+\read\infile to\myk
+\closein\infile
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            legend style={draw=none,at={(0.98,0.5)},anchor=east},
+            legend cell align=left,
+            thick,
+            axis lines=middle,
+            %xlabel style={anchor=north},
+            ylabel style={anchor=east},
+            %axis y discontinuity=crunch,
+            enlarge x limits=0.05,
+            enlarge y limits=0.1,
+            width=6in, height=3in,
+            xlabel={\(t\)},
+            ylabel={\(\ev{r^2}\)},
+            ]
+            \addplot+[mark=none] table[x index=0, y index=1] {tmp/r2pc.dat};
+            \addlegendentryexpanded{Simulation result.};
+            \addplot+[mark=none] table[x index=0, y index=2] {tmp/r2pc.dat};
+            \addlegendentryexpanded{Approximation \(t^{2\cdot\num{\myk}}\)};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{The mean squared displacement as a function of time with \(p=p_c\), when it is expected that the mean squared displacement is proportional to some power of \(t\) which is smaller than \(1\). The nonlinearity confirms the deviation from normal diffusion.}%
+    \label{fig:r2pc}
+\end{figure}
 
 \nocite{*}
 \printbibliography{}
