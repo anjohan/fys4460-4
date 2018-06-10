@@ -9,16 +9,16 @@ program findk
     real(kind=dp), dimension(:,:), allocatable :: displacements
     real(kind=dp), dimension(:), allocatable :: ps, xis
     integer, dimension(:), allocatable :: t, t0s
-    real(kind=dp) :: k, slope, const, expconst
+    real(kind=dp) :: k, slope, const, expconst, nu, slope2, const2
     character(len=:), allocatable :: filename
 
     L = 512
-    num_systems = 10
-    num_walkers = 100
+    num_systems = 20
+    num_walkers = 50
     num_steps   = 1000000
     num_ps = 10
 
-    ps = linspace(pc, 1.2d0*pc, num_ps)
+    ps = linspace(pc, 1.3d0*pc, num_ps)
     allocate(t(0:num_steps))
     allocate(displacements(0:num_steps, num_ps))
     t(:) = [(i, i = 0, num_steps)]
@@ -26,7 +26,8 @@ program findk
     call random_seed()
 
     do i = 1, num_ps
-        displacements(:,i) = random_walkers(ps(i), L, num_systems, num_walkers, num_steps)
+        displacements(:,i) = random_walkers(ps(i), L, num_systems, &
+                                            num_walkers, num_steps)
     end do
 
     allocate(t0s(2:num_ps))
@@ -46,6 +47,10 @@ program findk
             xis(i) = sqrt(displacements(t0, i))
         end associate
     end do
+
+    call linfit(log(ps(2:) - pc), log(xis), slope, const)
+    call linfit(log(ps(2:) - pc), log(1.0d0*t0s), slope2, const2)
+    nu = -slope
 
     open(newunit=fileunit, file="tmp/r2.dat", status="replace")
     do i = 1, num_steps, num_steps/1000
@@ -74,7 +79,27 @@ program findk
 
     open(newunit=fileunit, file="tmp/r2_t0xi.dat", status="replace")
     do i = 2, num_ps
-        write(unit=fileunit, fmt="(f0.3)") t0s(i), xis(i)
+        write(unit=fileunit, fmt="(i0,x,f0.3)") t0s(i), xis(i)
     end do
+    close(unit=fileunit)
+
+    open(newunit=fileunit, file="tmp/r2_pxi.dat", status="replace")
+    do i = 2, num_ps
+        write(unit=fileunit, fmt="(f0.3,x,f0.3,x,f0.3)") ps(i), xis(i), exp(const)*(ps(i)-pc)**slope
+    end do
+    close(unit=fileunit)
+
+    open(newunit=fileunit, file="tmp/r2_pt0.dat", status="replace")
+    do i = 2, num_ps
+        write(unit=fileunit, fmt="(f0.3,x,i0,x,f0.3)") ps(i)-pc, t0s(i), exp(const2)*(ps(i)-pc)**slope2
+    end do
+    close(unit=fileunit)
+
+    open(newunit=fileunit, file="tmp/r2_nu.dat", status="replace")
+    write(unit=fileunit, fmt="(f0.3)") nu
+    close(unit=fileunit)
+
+    open(newunit=fileunit, file="tmp/r2_t0pow.dat", status="replace")
+    write(unit=fileunit, fmt="(f0.3)") slope2
     close(unit=fileunit)
 end program findk

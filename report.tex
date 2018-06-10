@@ -264,36 +264,80 @@ When \(p=p_c\), the mean squared displacement behaves according to
                     tex.sprint(txt)
                     print(txt)
                 end
-                t0s = {}
-                i = 0
-                for line in io.lines("tmp/r2_t0s.dat") do
-                    i = i + 1
-                    t0s[i] = line
-                end
-                num_t0s = i
-                xis = {}
-                i = 0
-                for line in io.lines("tmp/r2_xis.dat") do
-                    i = i + 1
-                    xis[i] = line
-                    txt = "\\coordinate (" .. tostring(i) .. ") at (axis cs:"
-                          .. t0s[i] .. ","
-                          .. tostring(xis[i]*xis[i]) .. ");"
-                    print(txt)
-                    tex.sprint(txt)
-                end
             \end{luacode*}
+            \addplot+[only marks, gray] table[y expr=\thisrowno{1}^2] {tmp/r2_t0xi.dat};
         \end{axis}
-        \begin{luacode*}
-            for i = 1, num_t0s do
-                txt = "\\filldraw[gray] (" .. tostring(i) .. ") circle (0.05);"
-                print(txt)
-                tex.sprint(txt)
-            end
-        \end{luacode*}
     \end{tikzpicture}
     \caption{Mean squared displacement as a function of time for probabilities above the percolation threshold. A crossover time time is expected where the mean squared displacement becomes linear in time. As the mean squared displacement is proportional to a power smaller than unity before the crossover time, the crossover time is when the mean squared displacement starts deviating from the behaviour at \(p=p_c\). The dots are positioned at \((t_0,\xi^2)\), and mark the point where the graphs deviate significantly from the behvaviour at \(p=p_c\).}%
     \label{fig:r2p}
+\end{figure}
+
+\openin\infile=tmp/r2_nu.dat
+\read\infile to\mynu
+\closein\infile
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            legend style={draw=none,at={(0.98,0.5)},anchor=east},
+            legend cell align=left,
+            thick,
+            axis lines=middle,
+            %xlabel style={anchor=north},
+            ylabel style={anchor=west},
+            %axis y discontinuity=crunch,
+            enlarge x limits=0.05,
+            enlarge y limits=0.1,
+            width=6in, height=3in,
+            xlabel={\(p\)},
+            ylabel={\(\xi\)},
+            ]
+            \addplot+[mark=none] table[x index=0, y index=1] {tmp/r2_pxi.dat};
+            \addlegendentryexpanded{Simulation result.};
+            \addplot+[mark=none] table[x index=0, y index=2] {tmp/r2_pxi.dat};
+            \addlegendentryexpanded{Approximation \(\qty(p-p_c)^{-\num{\mynu}}\)};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Characteristic cluster size \(\xi\) as a function of probability calculated from the dots in the figure above. Theory predicts \(\xi \propto \qty(p-p_c)^{-\nu}\) with \(\nu=4/3\). The approximation \(\nu=\num{\mynu}\) obtained from linear regression on  a logarithmic scale is consistent with this.}%
+    \label{fig:r2pc}
+\end{figure}
+
+\openin\infile=tmp/r2_t0pow.dat
+\read\infile to\tpow
+\closein\infile
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            legend style={draw=none,at={(0.98,0.5)},anchor=east},
+            legend cell align=left,
+            %xmode=log,ymode=log,
+            thick,
+            axis lines=middle,
+            xlabel style={anchor=south},
+            ylabel style={anchor=east},
+            %axis x discontinuity=crunch,
+            enlarge x limits=0.15,
+            enlarge y limits=0.12,
+            width=6in, height=3in,
+            xlabel={\(p-p_c\)},
+            ylabel={\(t_0\)},
+            x tick label style={
+            /pgf/number format/.cd,
+                fixed,
+                fixed zerofill,
+                precision=2,
+            /tikz/.cd
+            }
+            ]
+            \addplot+[mark=none] table[x index=0, y index=1] {tmp/r2_pt0.dat};
+            \addlegendentryexpanded{Simulation result.};
+            \addplot+[mark=none] table[x index=0, y index=2] {tmp/r2_pt0.dat};
+            \addlegendentryexpanded{Approximation \(\qty(p-p_c)^{\num{\tpow}}\)};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Characteristic crossover time \(t_0\) as a function of probability calculated from the dots in the figure above.}%
+    \label{fig:r2pc}
 \end{figure}
 
 \nocite{*}
