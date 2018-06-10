@@ -44,7 +44,7 @@
 \usepgfplotslibrary{external}
 \tikzset{external/system call={lualatex \tikzexternalcheckshellescape -halt-on-error -interaction=batchmode -jobname "\image" "\texsource"}}
 \tikzexternalize[prefix=tmp/, mode=list and make]
-\pgfplotsset{cycle list/Paired}
+\pgfplotsset{cycle list/Set1}
 \pgfplotsset{compat=1.8}
 \renewcommand{\CancelColor}{\color{red}}
 \let\oldexp=\exp
@@ -196,7 +196,7 @@ From these considerations, the following procedure can be used to calculate expo
     \end{itemize}
 \end{itemize}
 
-\subsection{Diffusion at \(p=p_c\)}
+\subsection{Mean squared displacement at \(p=p_c\)}
 When \(p=p_c\), the mean squared displacement behaves according to
 \[
     \ev{r^2}\propto t^{2k'}.
@@ -213,7 +213,7 @@ When \(p=p_c\), the mean squared displacement behaves according to
             thick,
             axis lines=middle,
             %xlabel style={anchor=north},
-            ylabel style={anchor=east},
+            ylabel style={anchor=west},
             %axis y discontinuity=crunch,
             enlarge x limits=0.05,
             enlarge y limits=0.1,
@@ -229,6 +229,71 @@ When \(p=p_c\), the mean squared displacement behaves according to
     \end{tikzpicture}
     \caption{The mean squared displacement as a function of time with \(p=p_c\), when it is expected that the mean squared displacement is proportional to some power of \(t\) which is smaller than \(1\). The nonlinearity confirms the deviation from normal diffusion.}%
     \label{fig:r2pc}
+\end{figure}
+
+\subsection{Mean squared displacement for \(p\geq p_c\)}
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            xmode=log, ymode=log,
+            % ymin=0.000000000001,
+            legend style={draw=none,at={(0.02,0.98)},anchor=north west},
+            legend cell align=left,
+            legend columns=2,
+            thick,
+            %axis lines=middle,
+            %xlabel style={anchor=west},
+            %ylabel style={anchor=south east},
+            %axis y discontinuity=crunch,
+            enlarge x limits=0.05,
+            enlarge y limits=0.1,
+            width=6in, height=3in,
+            xlabel={\(t\)},
+            ylabel={\(\ev{r^2}\)},
+            ]
+            \begin{luacode*}
+                local i = 0
+                for line in io.lines("tmp/r2_ps.dat") do
+                    i = i + 1
+                    print(line)
+                    txt = "\\addplot+[mark=none] table[x index=0, y index="
+                          .. tostring(i) .. "]{tmp/r2.dat};"
+                          .. "\\addlegendentryexpanded{\\(p = \\num{"
+                          .. line .. "}\\)};"
+                    tex.sprint(txt)
+                    print(txt)
+                end
+                t0s = {}
+                i = 0
+                for line in io.lines("tmp/r2_t0s.dat") do
+                    i = i + 1
+                    t0s[i] = line
+                end
+                num_t0s = i
+                xis = {}
+                i = 0
+                for line in io.lines("tmp/r2_xis.dat") do
+                    i = i + 1
+                    xis[i] = line
+                    txt = "\\coordinate (" .. tostring(i) .. ") at (axis cs:"
+                          .. t0s[i] .. ","
+                          .. tostring(xis[i]*xis[i]) .. ");"
+                    print(txt)
+                    tex.sprint(txt)
+                end
+            \end{luacode*}
+        \end{axis}
+        \begin{luacode*}
+            for i = 1, num_t0s do
+                txt = "\\filldraw[gray] (" .. tostring(i) .. ") circle (0.05);"
+                print(txt)
+                tex.sprint(txt)
+            end
+        \end{luacode*}
+    \end{tikzpicture}
+    \caption{Mean squared displacement as a function of time for probabilities above the percolation threshold. A crossover time time is expected where the mean squared displacement becomes linear in time. As the mean squared displacement is proportional to a power smaller than unity before the crossover time, the crossover time is when the mean squared displacement starts deviating from the behaviour at \(p=p_c\). The dots are positioned at \((t_0,\xi^2)\), and mark the point where the graphs deviate significantly from the behvaviour at \(p=p_c\).}%
+    \label{fig:r2p}
 \end{figure}
 
 \nocite{*}

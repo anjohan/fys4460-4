@@ -1,4 +1,4 @@
-reportdeps =  report.tex sources.bib tmp/k.dat
+reportdeps =  report.tex sources.bib tmp/k.dat tmp/r2.dat
 MAKEFLAGS += --silent
 all:
 	@mkdir -p tmp
@@ -12,6 +12,8 @@ report.pdf: report.makefile $(reportdeps)
 	./latexrun --latex-cmd lualatex --bibtex-cmd biber report.tex
 tmp/k.dat: build/k
 	./build/k
+tmp/r2.dat: build/r2
+	./build/r2
 debug:
 	@mkdir -p debug_folder
 	@cd debug_folder; cmake -DCMAKE_BUILD_TYPE=Debug ..; make
