@@ -479,7 +479,14 @@ When \(p=p_c\), the mean squared displacement behaves according to
             enlarge y limits=0.1,
             width=6in, height=3in,
             xlabel={\(\qty(x\text{ or }y)/t^k\)},
-            ylabel={\(P(x,t)\)},
+            ylabel={\(xP(x,t)\)},
+            y tick label style={
+            /pgf/number format/.cd,
+                fixed,
+                fixed zerofill,
+                precision=2,
+            /tikz/.cd
+            }
             ]
             \begin{luacode*}
                 local i = 0
@@ -493,7 +500,9 @@ When \(p=p_c\), the mean squared displacement behaves according to
                               .. tostring(0) .. ", y index="
                               .. tostring(i) .. ", x expr=\\thisrowno{0}/"
                               .. line .. "^"
-                              .. tostring(2*k) .. "]{tmp/P_pc.dat};"
+                              .. tostring(k) .. ",y expr=abs(\\thisrowno{"
+                              .. tostring(0) .. "})*\\thisrowno{"
+                              .. tostring(i) .. "}]{tmp/P_pc.dat};"
                               .. "\\addlegendentryexpanded{\\(t = \\num{"
                               .. line .. "}\\)};"
                         tex.sprint(txt)

@@ -14,12 +14,11 @@ program probdist
     num_walkers = 5000
     num_steps = 5000
     num_hists = 5
-    num_bins  = 1000
 
     histtimes = [(num_steps/num_hists * i, i = 0, num_hists)]
 
     histograms = probability_distribution(pc, L, num_steps, num_walkers, &
-                                          num_systems, num_hists, num_bins)
+                                          num_systems, num_hists)
 
     open(newunit=fileunit, file="tmp/P_pc.dat", status="replace")
     do i = 1, size(histograms,2)
