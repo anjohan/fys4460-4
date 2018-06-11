@@ -25,6 +25,6 @@ function(addexewithlibs name)
     target_link_libraries(${name} ${mylibraries})
 endfunction()
 
-foreach(exe k r2 verification stuff)
+foreach(exe k r2 P verification stuff)
     addexewithlibs(${exe})
 endforeach()

@@ -139,6 +139,10 @@ program findk
     write(unit=fileunit, fmt="(f0.3)") mu
     close(unit=fileunit)
 
+    open(newunit=fileunit, file="tmp/r2_k.dat", status="replace")
+    write(unit=fileunit, fmt="(f0.3)") k
+    close(unit=fileunit)
+
     open(newunit=fileunit, file="tmp/r2_D.dat", status="replace")
     do i = 2, num_ps
         write(unit=fileunit, fmt="(f0.3,x,f0.3,x,f0.3)") ps(i)-pc, Ds(i), exp(Dconst)*(ps(i)-pc)**mu

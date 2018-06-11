@@ -1,4 +1,4 @@
-reportdeps =  report.tex sources.bib tmp/k.dat tmp/r2.dat
+reportdeps =  report.tex sources.bib tmp/k.dat tmp/r2.dat tmp/P_pc.dat
 MAKEFLAGS += --silent
 all:
 	@mkdir -p tmp
@@ -10,6 +10,8 @@ report.makefile: $(reportdeps)
 report.pdf: report.makefile $(reportdeps)
 	make -j4 -f report.makefile
 	./latexrun --latex-cmd lualatex --bibtex-cmd biber report.tex
+tmp/P_pc.dat: build/P tmp/r2.dat
+	./build/P
 tmp/k.dat: build/k
 	./build/k
 tmp/r2.dat: build/r2
