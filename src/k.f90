@@ -11,8 +11,8 @@ program findk
     real(kind=dp) :: k, slope, const, expconst
 
     L = 512
-    num_systems = 10
-    num_walkers = 100
+    num_systems = 100
+    num_walkers = 1000
     num_steps   = 100000
 
     call random_seed()

@@ -17,7 +17,7 @@ program findk
 
     L = 512
     num_systems = 20
-    num_walkers = 50
+    num_walkers = 500
     num_steps   = 1000000
     num_ps = 10
 

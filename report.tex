@@ -513,7 +513,63 @@ When \(p=p_c\), the mean squared displacement behaves according to
         \end{axis}
     \end{tikzpicture}
     \caption{Probability distribution for \(p=p_c\).}%
-    \label{fig:Ppc}
+    \label{fig:Ppc2}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            %xmode=log,
+            %ymode=log,
+            % ymin=0.000000000001,
+            legend style={draw=none,at={(0.02,0.98)},anchor=north west},
+            legend cell align=left,
+            legend columns=2,
+            thick,
+            %axis lines=middle,
+            %xlabel style={anchor=west},
+            %ylabel style={anchor=south east},
+            %axis y discontinuity=crunch,
+            enlarge x limits=0.05,
+            enlarge y limits=0.1,
+            width=6in, height=3in,
+            xlabel={\(\qty(x\text{ or }y)/t^k\)},
+            ylabel={\(t^kP(x,t)\)},
+            y tick label style={
+            /pgf/number format/.cd,
+                fixed,
+                fixed zerofill,
+                precision=2,
+            /tikz/.cd
+            }
+            ]
+            \begin{luacode*}
+                local i = 0
+                for line in io.lines("tmp/r2_k.dat") do
+                    k = line
+                end
+                for line in io.lines("tmp/P_t.dat") do
+                    i = i +1
+                    if i>1 then
+                        txt = "\\addplot+[mark=none] table[x index="
+                              .. tostring(0) .. ", y index="
+                              .. tostring(i) .. ", x expr=\\thisrowno{0}/"
+                              .. line .. "^"
+                              .. tostring(k) .. ",y expr="
+                              .. line .. "^" .. k .. "*\\thisrowno{"
+                              .. tostring(i) .. "}]{tmp/P_pc.dat};"
+                              .. "\\addlegendentryexpanded{\\(t = \\num{"
+                              .. line .. "}\\)};"
+                        tex.sprint(txt)
+                        print(txt)
+                    end
+                end
+            \end{luacode*}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Probability distribution for \(p=p_c\).}%
+    \label{fig:Ppc3}
 \end{figure}
 
 \nocite{*}
